@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'database_helper.dart';
 import 'item_model.dart';
 
+// main() dibungkus MaterialApp agar file ini tetap bisa di-run mandiri saat proses testing
 void main() {
   // Pastikan binding Flutter diinisialisasi sebelum mengakses database
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp3());
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: MyApp3(),
+  ));
 }
 
 class MyApp3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Database Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+    // PERBAIKAN 1: Hapus MaterialApp, ganti dengan Theme agar warna aplikasi tidak berubah
+    return Theme(
+      data: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      child: HomePage(), // Langsung memanggil HomePage
     );
   }
 }
@@ -125,6 +128,14 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Flutter Database Demo'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        
+        // PERBAIKAN 2: Tambahkan tombol Back di sini
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Fungsi untuk kembali ke menu sebelumnya (MateriPage)
+          },
+        ),
       ),
       body: Column(
         children: [

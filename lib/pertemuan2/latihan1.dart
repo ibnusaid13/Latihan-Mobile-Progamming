@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'pages/dashboard_page.dart';
 import 'pages/form_page.dart';
 
+// Jika file ini dipanggil dari main.dart utama, fungsi main() di sini bisa diabaikan/dihapus
 void main() {
-  runApp(const MyApp2());
+  runApp(const MaterialApp(home: MyApp2()));
 }
 
 class MyApp2 extends StatelessWidget {
@@ -11,14 +12,8 @@ class MyApp2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'App Mahasiswa',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ), // ThemeData
-      home: const MainPages(),
-      debugShowCheckedModeBanner: false,
-    ); // MaterialApp
+    // PERBAIKAN: Hapus MaterialApp, langsung return MainPages()
+    return const MainPages(); 
   }
 }
 
@@ -50,7 +45,17 @@ class _MainPageState extends State<MainPages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_selectedIndex]),
+        // PERBAIKAN: Tambahkan tombol back (leading) di sini
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Fungsi untuk kembali ke halaman sebelumnya
+          },
+        ),
+        title: Text(
+          _titles[_selectedIndex],
+          style: const TextStyle(color: Colors.white), // Ubah teks jadi putih agar kontras
+        ),
         backgroundColor: Colors.lightBlueAccent,
       ), // AppBar
       body: _pages[_selectedIndex],

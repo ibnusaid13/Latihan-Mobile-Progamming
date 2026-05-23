@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 
+// Dibungkus MaterialApp di sini hanya agar bisa di-run mandiri jika dites
 void main() {
-  runApp(MainPage());
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: MainPage(),
+  ));
 }
 
 class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mata Kuliah Mobile Programming',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const PageMain(),
-      debugShowCheckedModeBanner: false,
-    );
+    // PERBAIKAN 1: Hapus MaterialApp, langsung return PageMain()
+    return const PageMain();
   }
 }
 
@@ -30,9 +30,9 @@ class _PageMainState extends State<PageMain> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const MateriPage(),
-    const NavigasiPage(),
-    const ProfilePage(),
+    const MateriPage(),   // Pastikan class ini ada di navbar.dart
+    const NavigasiPage(), // Pastikan class ini ada di navbar.dart
+    const ProfilePage(),  // Pastikan class ini ada di navbar.dart
   ];
 
   void _onItemTapped(int index) {
@@ -44,6 +44,20 @@ class _PageMainState extends State<PageMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // PERBAIKAN 2: Tambahkan AppBar beserta tombol back di sini
+      appBar: AppBar(
+        title: const Text(
+          'Mobile Programming',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Kembali ke menu utama (Grid Menu)
+          },
+        ),
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

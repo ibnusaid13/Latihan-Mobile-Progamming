@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'database_helper.dart';
 import 'mahasiswa_model.dart';
 
+// main() tetap dibungkus MaterialApp agar file ini bisa di-run secara terpisah jika diperlukan
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp4());
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: MyApp4(),
+  ));
 }
 
 class MyApp4 extends StatelessWidget {
@@ -12,11 +16,9 @@ class MyApp4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sistem Akademik',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        // Mengubah warna tema menjadi Teal (Hijau Kebiruan)
+    // PERBAIKAN 1: Hapus MaterialApp, gunakan Theme agar tema Teal tetap teraplikasikan
+    return Theme(
+      data: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
@@ -24,7 +26,7 @@ class MyApp4 extends StatelessWidget {
           elevation: 0,
         ),
       ),
-      home: const HomePage(),
+      child: const HomePage(),
     );
   }
 }
@@ -216,6 +218,14 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Data Akademik', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
+        
+        // PERBAIKAN 2: Tambahkan tombol panah back di sini
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Kembali ke Grid Menu MateriPage
+          },
+        ),
       ),
       body: Column(
         children: [
@@ -284,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                                 radius: 25,
                                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                                 child: Text(
-                                  mhs.nama[0].toUpperCase(),
+                                  mhs.nama.isNotEmpty ? mhs.nama[0].toUpperCase() : '?',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
@@ -327,7 +337,6 @@ class _HomePageState extends State<HomePage> {
                                     _confirmDelete(mhs);
                                   }
                                 },
-                                // BAGIAN YANG DIPERBAIKI (Dilengkapi)
                                 itemBuilder: (BuildContext context) => [
                                   const PopupMenuItem(
                                     value: 'edit',

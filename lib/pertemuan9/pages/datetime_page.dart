@@ -1,35 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:mobileprogramming/pertemuan9/pages/profil_page.dart';
 import 'package:intl/intl.dart';
 
 class DatetimePage extends StatefulWidget {
-  DatetimePage({super.key});
+  const DatetimePage({super.key});
 
   @override
   State<DatetimePage> createState() => _DatetimePageState();
 }
 
 class _DatetimePageState extends State<DatetimePage> {
-  final List<Widget> page = [ProfilePage(), DatetimePage()];
+  // Variabel list page dan currentPage dihapus karena tidak diperlukan di sini
+  // (Sudah diatur oleh MyApp9)
 
   TextEditingController timePicker = TextEditingController();
   TextEditingController datePicker = TextEditingController();
 
-  int currentPage = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Pertemuan 9"),
-        elevation: 0,
-        centerTitle: true,
-      ),
+      // PERBAIKAN: AppBar dihapus agar tidak bertumpuk dengan AppBar di MyApp9
+      
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            //Time Picker
+            // Time Picker
             TextField(
               controller: timePicker,
               decoration: InputDecoration(
@@ -37,7 +32,7 @@ class _DatetimePageState extends State<DatetimePage> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 labelText: 'Pick current a Time',
-                labelStyle: TextStyle(fontSize: 16, color: Colors.blue),
+                labelStyle: const TextStyle(fontSize: 16, color: Colors.blue),
               ),
               onTap: () async {
                 var time = await showTimePicker(
@@ -46,15 +41,16 @@ class _DatetimePageState extends State<DatetimePage> {
                 );
                 if (time != null) {
                   setState(() {
+                    // ignore: use_build_context_synchronously
                     timePicker.text = time.format(context);
                   });
                 }
               },
             ),
             
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            //Date Picker
+            // Date Picker
             TextField(
               controller: datePicker,
               decoration: InputDecoration(
@@ -62,7 +58,7 @@ class _DatetimePageState extends State<DatetimePage> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 labelText: 'Pick current a Date',
-                labelStyle: TextStyle(fontSize: 16, color: Colors.blue),
+                labelStyle: const TextStyle(fontSize: 16, color: Colors.blue),
               ),
               onTap: () async {
                 DateTime? datetime = await showDatePicker(

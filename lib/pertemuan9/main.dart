@@ -4,48 +4,60 @@ import 'package:mobileprogramming/pertemuan9/pages/profil_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 void main() {
-  runApp(MyApp9());
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: MyApp9(),
+  ));
 }
 
 class MyApp9 extends StatefulWidget {
+  const MyApp9({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp9> {
   final List<Widget> _page = [ProfilePage(), DatetimePage()];
+  
+  // PERBAIKAN 1: Buat list judul untuk masing-masing tab
+  final List<String> _titles = ['Profile', 'Date & Time']; 
 
   var currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(
-        body: _page[currentPage],
-        bottomNavigationBar: SalomonBottomBar(
-          currentIndex: currentPage,
-          onTap: (i) => setState(() => currentPage = i),
-          items: [
-            //Profile
-            SalomonBottomBarItem(
-              icon: Icon(Icons.person),
-              title: Text("Profile"),
-              selectedColor: Colors.blue,
-            ),
-
-            //Date & Time Picker
-            SalomonBottomBarItem(
-              icon: Icon(Icons.calendar_month),
-              title: Text("Date & Time"),
-              selectedColor: Colors.blue,
-            ),
-          ],
+    return Scaffold(
+      // PERBAIKAN 2: Gunakan 1 AppBar statis di sini, tapi judulnya dinamis
+      appBar: AppBar(
+        title: Text(
+          _titles[currentPage], // Judul akan otomatis berubah sesuai tab
+          style: const TextStyle(color: Colors.white),
         ),
+        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Kembali ke MateriPage
+          },
+        ),
+      ),
+      body: _page[currentPage],
+      bottomNavigationBar: SalomonBottomBar(
+        currentIndex: currentPage,
+        onTap: (i) => setState(() => currentPage = i),
+        items: [
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.person),
+            title: const Text("Profile"),
+            selectedColor: Colors.blue,
+          ),
+          SalomonBottomBarItem(
+            icon: const Icon(Icons.calendar_month),
+            title: const Text("Date & Time"),
+            selectedColor: Colors.blue,
+          ),
+        ],
       ),
     );
   }

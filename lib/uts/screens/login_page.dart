@@ -74,13 +74,13 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       );
     }
   }
+
   // --- WIDGET LOGO CUSTOM (SESUAI TEMA TOKO) ---
   Widget _buildGamingForgeLogo() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center, // Pusatkan secara vertikal
-      crossAxisAlignment: CrossAxisAlignment.center, // Pusatkan secara horizontal
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // 1. Ikon Badge Logo
         Stack(
           alignment: Alignment.center,
           children: [
@@ -97,7 +97,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 ),
               ),
             ),
-            // Ring Luar Gradasi
             Container(
               width: 110,
               height: 110,
@@ -117,22 +116,19 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 ],
               ),
             ),
-            // Background Dalam Gelap
             Container(
               width: 100,
               height: 100,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFF0F0F1E), // Senada dengan background app
+                color: Color(0xFF0F0F1E),
               ),
             ),
-            // Ikon Inti (Esports/Gaming)
             const Icon(
               Icons.sports_esports_outlined,
               size: 60,
               color: Colors.white,
             ),
-            // Dekorasi Garis Listrik Bawah subtle
             Positioned(
               bottom: 15,
               child: Container(
@@ -154,8 +150,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
           ],
         ),
         const SizedBox(height: 20),
-        
-        // 2. Teks Branding "GAMINGFORGE"
         const Text(
           "GAMINGFORGE",
           textAlign: TextAlign.center,
@@ -163,7 +157,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             fontSize: 28,
             fontWeight: FontWeight.w900,
             color: Colors.white,
-            letterSpacing: 4, // Memberi kesan futuristik dan elegan
+            letterSpacing: 4,
             shadows: [
               Shadow(
                 color: Color(0xFF00F5FF),
@@ -174,7 +168,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
           ),
         ),
         const SizedBox(height: 5),
-        // Slogan Kecil
         Text(
           "ULTIMATE GAMING GEAR",
           textAlign: TextAlign.center,
@@ -192,10 +185,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1E), // Tema Dark
+      backgroundColor: const Color(0xFF0F0F1E),
       body: Stack(
         children: [
-          // Lingkaran dekorasi latar belakang (Glow effects)
+          // Lingkaran dekorasi latar belakang
           Positioned(
             top: -150,
             right: -100,
@@ -231,14 +224,13 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             ),
           ),
           
-          // Konten Utama
+          // Konten Utama Form Login
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: FadeTransition(
                   opacity: _fadeAnimation,
-                  // Menggunakan ConstrainedBox untuk membatasi ukuran maksimal Form seperti HP
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 400),
                     child: Padding(
@@ -247,13 +239,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SizedBox(height: 40),
-                          
-                          // --- MEMANGGIL WIDGET LOGO CUSTOM ---
                           _buildGamingForgeLogo(),
-                          
-                          const SizedBox(height: 60), // Jarak ke Form
-                          
-                          // Container Form Login
+                          const SizedBox(height: 60),
                           Container(
                             padding: const EdgeInsets.all(30),
                             decoration: BoxDecoration(
@@ -291,16 +278,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                   ),
                                 ),
                                 const SizedBox(height: 30),
-                                
-                                // Input Username
                                 _buildTextField(
                                   controller: _usernameController,
                                   label: "Username",
                                   icon: Icons.person_outline,
                                 ),
                                 const SizedBox(height: 20),
-                                
-                                // Input Password
                                 _buildTextField(
                                   controller: _passwordController,
                                   label: "Password",
@@ -308,8 +291,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                   isPassword: true,
                                 ),
                                 const SizedBox(height: 10),
-                                
-                                // Lupa Password (Optional)
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: TextButton(
@@ -324,16 +305,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                   ),
                                 ),
                                 const SizedBox(height: 20),
-                                
-                                // Tombol Login
                                 _buildLoginButton(),
                               ],
                             ),
                           ),
-                          
                           const SizedBox(height: 40),
-                          
-                          // Footer Info
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -363,9 +339,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                               ),
                             ],
                           ),
-                          
                           const SizedBox(height: 15),
-                          
                           Text(
                             "© 2026 GamingForge Hub. All Rights Reserved.",
                             style: TextStyle(
@@ -382,12 +356,34 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               ),
             ),
           ),
+
+          // --- PERBAIKAN: TOMBOL BACK CUSTOM ---
+          // Diletakkan di Stack agar melayang (floating) di atas background
+          Positioned(
+            top: 10,
+            left: 10,
+            child: SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1), // Efek transparan 
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    // Akan menutup halaman login dan kembali ke Grid Menu / MateriPage
+                    Navigator.pop(context); 
+                  },
+                ),
+              ),
+            ),
+          ),
+          
         ],
       ),
     );
   }
 
-  // Helper Widget untuk TextField
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
@@ -435,7 +431,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     );
   }
 
-  // Helper Widget untuk Tombol Login
   Widget _buildLoginButton() {
     return Container(
       width: double.infinity,
