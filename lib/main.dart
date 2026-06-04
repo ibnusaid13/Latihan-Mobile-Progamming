@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mobileprogramming/navbar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-// 1. TAMBAHKAN DUA IMPORT INI UNTUK DEVICE PREVIEW
+// Import untuk Device Preview
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 
+// Import file Login kamu
+import 'package:mobileprogramming/pertemuan10/login_api.dart'; 
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // pastikan binding siap
-  await initializeDateFormatting('id_ID', null); // <== inisialisasi locale Indonesia
+  WidgetsFlutterBinding.ensureInitialized(); 
+  await initializeDateFormatting('id_ID', null); 
   
-  // 2. BUNGKUS APLIKASI DENGAN DEVICE PREVIEW
   runApp(
     DevicePreview(
-      enabled: !kReleaseMode, // Device preview aktif saat proses debug
+      enabled: !kReleaseMode, 
       builder: (context) => MainPage(),
     ),
   );
@@ -23,7 +25,6 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // 3. TAMBAHKAN LOCALE DAN BUILDER DEVICE PREVIEW DI SINI
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       
@@ -31,7 +32,8 @@ class MainPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PageMain(),
+      // TAMPILAN AWAL SEKARANG ADALAH HALAMAN LOGIN
+      home: const Login(), 
       debugShowCheckedModeBanner: false,
     );
   }
