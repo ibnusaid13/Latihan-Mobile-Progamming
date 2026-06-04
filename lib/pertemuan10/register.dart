@@ -14,121 +14,194 @@ class _RegisterState extends State<Register> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool showPassword = true;
+  
+  // State untuk UI
+  bool _isObscure = true;
+  bool _isLoading = false;
 
   final Dio _dio = Dio(); 
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: Colors.blueGrey[200],
+      backgroundColor: Colors.white, // Background bersih
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87),
           onPressed: () {
             Navigator.pop(context); 
           },
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: SizedBox(
-          width: size.width,
-          height: size.height,
-          child: Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: size.width * 0.85,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Center(
-                      child: Text(
-                        "Register",
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.05),
-                    TextFormField(
-                      validator: (value) => Validator.validateName(value ?? ""),
-                      controller: nameController,
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        hintText: "Name",
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    TextFormField(
-                      validator: (value) => Validator.validateEmail(value ?? ""),
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: "Email",
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    TextFormField(
-                      obscureText: showPassword,
-                      validator: (value) => Validator.validatePassword(value ?? ""),
-                      controller: passwordController,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.06),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Bagian Header
+                  Center(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: _handleRegister,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.indigo,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                            ),
-                            child: const Text(
-                              "Register",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                        const Text(
+                          "Create Account",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Sign up to get started",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 40),
+                  
+                  // Form Input Name
+                  TextFormField(
+                    validator: (value) => Validator.validateName(value ?? ""),
+                    controller: nameController,
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      hintText: "Full Name",
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      prefixIcon: const Icon(Icons.person_outline, color: Colors.blue),
+                      filled: true,
+                      fillColor: Colors.blueGrey[50],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // Form Input Email
+                  TextFormField(
+                    validator: (value) => Validator.validateEmail(value ?? ""),
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      hintText: "Email",
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      prefixIcon: const Icon(Icons.email_outlined, color: Colors.blue),
+                      filled: true,
+                      fillColor: Colors.blueGrey[50],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // Form Input Password
+                  TextFormField(
+                    obscureText: _isObscure,
+                    validator: (value) => Validator.validatePassword(value ?? ""),
+                    controller: passwordController,
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: InputDecoration(
+                      hintText: "Password",
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      prefixIcon: const Icon(Icons.lock_outline, color: Colors.blue),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscure ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey[600],
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                      ),
+                      filled: true,
+                      fillColor: Colors.blueGrey[50],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  
+                  // Tombol Register
+                  SizedBox(
+                    height: 55,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _handleRegister,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 3,
+                              ),
+                            )
+                          : const Text(
+                              "Register",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 30),
+                  
+                  // Opsi Kembali ke Login
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already have an account?",
+                        style: TextStyle(color: Colors.grey[700], fontSize: 15),
+                      ),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context); // Kembali ke halaman Login
+                        },
+                        child: const Text(
+                          "Log in",
+                          style: TextStyle(
+                            color: Colors.blue, 
+                            fontWeight: FontWeight.bold, 
+                            fontSize: 15
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -139,10 +212,9 @@ class _RegisterState extends State<Register> {
 
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Processing Data...'),
-        backgroundColor: Colors.green.shade300,
-      ));
+      setState(() {
+        _isLoading = true; // Munculkan indikator loading
+      });
 
       Map<String, dynamic> userData = {
         "name": nameController.text,
@@ -152,19 +224,37 @@ class _RegisterState extends State<Register> {
 
       try {
         Response response = await _apiClient(_dio).registerUser(userData);
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
+        
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
+          // Menampilkan dialog sukses
+          if (!mounted) return;
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                title: const Text("Success", style: TextStyle(color: Colors.blue)),
+                content: const Text("Registrasi berhasil! Silakan Log in."),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text("OK", style: TextStyle(color: Colors.blue)),
+                    onPressed: () {
+                      Navigator.of(context).pop(); 
+                      Navigator.pushReplacement(
+                        context, 
+                        MaterialPageRoute(builder: (context) => const Login())
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text('Gagal melakukan registrasi, coba lagi.'),
-            backgroundColor: Colors.red.shade300,
-          ));
+          _showErrorSnackbar('Gagal melakukan registrasi, coba lagi.');
         }
       } on DioError catch (e) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        
         String errorMessage = 'Terjadi kesalahan pada server';
         if (e.response != null && e.response?.data != null) {
           if (e.response?.data is Map) {
@@ -173,26 +263,33 @@ class _RegisterState extends State<Register> {
              errorMessage = e.message ?? errorMessage;
           }
         }
-        
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Error: $errorMessage'),
-          backgroundColor: Colors.red.shade300,
-        ));
+        _showErrorSnackbar('Error: $errorMessage');
       } catch (e) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red.shade300,
-        ));
+        _showErrorSnackbar('Error: $e');
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false; // Matikan indikator loading
+          });
+        }
       }
     }
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red.shade400,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ));
   }
 }
 
 class Validator {
   static String? validateName(String value) {
     if (value.length < 3) {
-      return 'Username is too short.';
+      return 'Nama terlalu pendek.';
     } else {
       return null;
     }
@@ -202,7 +299,7 @@ class Validator {
     Pattern pattern = r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+';
     RegExp regex = RegExp(pattern as String);
     if (!regex.hasMatch(value)) {
-      return 'Please enter a valid email address.';
+      return 'Masukkan alamat email yang valid.';
     } else {
       return null;
     }
@@ -210,7 +307,7 @@ class Validator {
 
   static String? validatePassword(String value) {
     if (value.isEmpty) {
-      return "Password can't be empty";
+      return "Password tidak boleh kosong";
     }
     return null;
   }
@@ -222,18 +319,14 @@ class _apiClient {
 
   Future<Response> registerUser(Map<String, dynamic> userData) async {
     try {
-      print("Sending request data: $userData"); 
-      
       FormData formData = FormData.fromMap(userData);
       
       Response response = await _dio.post(
         'https://mobileapp.e-budgeting.com/api/register',
         data: formData, 
       );
-      print("Response data: ${response.data}"); 
       return response;
-    } on DioError catch (e) {
-      print("Error occurred: ${e.response?.data ?? e.message}");
+    } on DioError {
       rethrow; 
     }
   }
