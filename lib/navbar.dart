@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobileprogramming/main.dart';
 import 'package:mobileprogramming/pertemuan10/login_api.dart';
+import 'package:mobileprogramming/pertemuan11/main.dart';
 import 'package:mobileprogramming/pertemuan2/latihan1.dart';
 import 'package:mobileprogramming/pertemuan3/latihan1.dart';
 import 'package:mobileprogramming/pertemuan4/latihan1.dart';
@@ -283,6 +284,20 @@ class MateriPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Login(),
+                           // kelas lain yang dipanggil
+                        ),  
+                      );
+                    },
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.folder,
+                    color: Colors.green,
+                    label: 'Pertemuan 11',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyApp11(),
                            // kelas lain yang dipanggil
                         ),  
                       );

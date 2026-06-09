@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart'; // [cite: 285]
+import 'package:shared_preferences/shared_preferences.dart'; // [cite: 286]
+
+class SessionModel with ChangeNotifier { // [cite: 287]
+  bool _isLoggedIn = false; // [cite: 287]
+  String _username = ''; // [cite: 288]
+
+  bool get isLoggedIn => _isLoggedIn; // [cite: 289]
+  String get username => _username; // [cite: 290]
+
+  Future<void> loadSession() async { // [cite: 291]
+    SharedPreferences prefs = await SharedPreferences.getInstance(); // [cite: 293]
+    _isLoggedIn = prefs.getBool('isLoggedIn') ?? false; // [cite: 293]
+    _username = prefs.getString('username') ?? ''; // [cite: 294]
+    notifyListeners(); // [cite: 295]
+  } // [cite: 292]
+
+  Future<void> saveSession(String username) async { // [cite: 296]
+    SharedPreferences prefs = await SharedPreferences.getInstance(); // [cite: 297]
+    await prefs.setBool('isLoggedIn', true); // [cite: 297]
+    await prefs.setString('username', username); // [cite: 298]
+    _isLoggedIn = true; // [cite: 299]
+    _username = username; // [cite: 300]
+    notifyListeners(); // [cite: 301]
+  }
+
+  Future<void> clearSession() async { // [cite: 303]
+    SharedPreferences prefs = await SharedPreferences.getInstance(); // [cite: 304]
+    await prefs.remove('isLoggedIn'); // [cite: 304]
+    await prefs.remove('username'); // [cite: 305]
+    _isLoggedIn = false; // [cite: 306]
+    _username = ''; // [cite: 307]
+    notifyListeners(); // [cite: 308]
+  } // [cite: 309]
+} // [cite: 310]
