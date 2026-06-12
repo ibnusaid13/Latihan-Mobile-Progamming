@@ -51,11 +51,25 @@ android {
         versionName flutterVersionName
     }
 
+    // 1. Tambahkan konfigurasi signing (keystore) di sini
+    signingConfigs {
+        release {
+            storeFile file('upload-keystore.jks') // Membaca file jks yang dipindah ke folder android/app
+            storePassword '130606'               // Ganti 'android' dengan password yang kamu buat tadi jika berbeda
+            keyAlias 'upload'                     // Alias yang kamu gunakan saat menjalankan keytool
+            keyPassword '130606'                 // Samakan dengan storePassword karena kamu tadi langsung menekan Enter
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            
+            // 2. Ubah baris ini dari signingConfigs.debug menjadi signingConfigs.release
+            signingConfig signingConfigs.release
+            
+            minifyEnabled false
+            shrinkResources false
         }
     }
 }
